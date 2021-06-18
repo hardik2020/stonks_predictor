@@ -7,9 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.js -e js,html,css,hbs"
   },
-  "author": "kamlesh",
+  "author": "Lokesh",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.25.1",
     "cookie-parser": "^1.4.5",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.3",
     "nodemailer": "^6.5.0",
+    "quandl": "0.0.6",
     "validator": "^13.5.2"
   }
 }

@@ -12,12 +12,22 @@ const nodemailer = require("nodemailer");
 require("./db/connection");
 const Register=require("./models/registers");
 
+const getName = require('./Constants/names')
+var Quandl = require("quandl");
+var quandl = new Quandl({
+    auth_token: "NF3NnMfXhGstxj5HDzVF",
+    api_version: 3,
+});
+const axios = require('axios')
+
 app.use(cookieParser());
 
 
 app.use(express.json({limit:'50mb'}));
 
 app.use(express.urlencoded({extended:false}));
+
+
 
 app.post('/fpass',async(req,res)=>{
   try{
@@ -221,6 +231,38 @@ app.get("/logout",authentication,async (req,res)=>{
     //await req.data.save();
     res.status(201).json({status:201});
   } catch (error) {
+    console.log(error);
+    res.status(400).json({status:400,error:error});
+  }
+})
+
+app.get("/timeSeries", async(req, res) => {
+  try{
+    const indexId = req.query.indexId;
+    console.log(req);
+    if(getName(indexId).length>0){
+      await quandl.dataset({
+        source: 'BSE',
+        table: 'BOM'+indexId
+      },{
+        start_date: '2019-06-06',
+        end_date: '2020-06-06',
+        order:'asc'
+      }, function(err, response){
+        if(err)
+            throw err;
+     
+            console.log(response);
+            res.status(201).json({data:(response)});
+    })
+      
+    }
+    else{
+      res.json({status:400,error:"Invalid Index Id",data:indexId});
+    }
+    // send all data to frontend
+  }
+  catch (error) {
     console.log(error);
     res.status(400).json({status:400,error:error});
   }
